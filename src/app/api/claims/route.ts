@@ -1,3 +1,4 @@
+// app/api/claims/route.ts
 import { NextResponse } from "next/server";
 import { db } from "@/lib/firebase";
 import { collection, doc, getDoc, setDoc } from "firebase/firestore";
@@ -8,7 +9,7 @@ const COLLECTION = "dailyClaims";
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const date = searchParams.get("date");
-  
+
   if (!date) {
     return NextResponse.json({ error: "Date required" }, { status: 400 });
   }
@@ -41,9 +42,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Date required" }, { status: 400 });
     }
 
-    // Use the date as the document ID for easy retrieval
     const docRef = doc(db, COLLECTION, date);
-    
+
     await setDoc(docRef, {
       date,
       totalAgentClaim,
